@@ -1,94 +1,83 @@
-from flask import Flask, jsonify, request
-import mysql.connector
-from flask_cors import CORS
+from flask import Flask, jsonify, request, redirect, url_for, flash
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-CORS(app)  # This is to allow cross-origin requests from your frontend
+app.secret_key = 'your_secret_key'  # For flash messages
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:1234@localhost/delivery-app'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
-# Database connection setup
-def get_db_connection():
-    return mysql.connector.connect(
-        host='localhost',
-        user='root',
-        password='1234',
-        database='delivery-app'
-    )
+# Define the User model
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
 
-# Route to add a worker
-@app.route('/worker', methods=['POST'])
-def add_worker():
-    data = request.get_json()
+    # Method to check password
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
-    name = data['name']
-    status = data['status']
+    # Method to set password with hashing
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
 
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute(
-            '''INSERT INTO delivery_workers (name, status) 
-               VALUES (%s, %s)''', (name, status)
-        )
-        conn.commit()
-        cursor.close()
-        conn.close()
-        return jsonify({'message': 'Worker added successfully'}), 201
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    def to_dict(self):
+        # Convert User model to a dictionary that can be returned in API responses
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email
+        }
 
-# Route to get all workers
-@app.route('/workers', methods=['GET'])
-def get_workers():
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM delivery_workers")
-        workers = cursor.fetchall()
-        cursor.close()
-        conn.close()
-        return jsonify(workers), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
-
-# Route to update a worker's status
-@app.route('/update-worker', methods=['POST'])
-def update_worker():
-    data = request.get_json()
+# Route to handle signup
+@app.route('/signup', methods=['POST'])
+def signup():
+    username = request.json.get('username')
+    password = request.json.get('password')
+    email = request.json.get('email')
     
-    worker_id = data['id']
-    status = data['status']
+    # Check if the username or email already exists
+    if User.query.filter_by(username=username).first() or User.query.filter_by(email=email).first():
+        return jsonify({'message': 'Username or Email already exists!'}), 400
     
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute(
-            '''UPDATE delivery_workers 
-               SET status = %s 
-               WHERE id = %s''', (status, worker_id)
-        )
-        conn.commit()
-        cursor.close()
-        conn.close()
-        return jsonify({'message': 'Worker updated successfully'}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    # Create a new user instance and hash the password
+    new_user = User(username=username, email=email)
+    new_user.set_password(password)
 
-# Route to track a specific worker by ID
-@app.route('/track-worker/<worker_id>', methods=['GET'])
-def track_worker(worker_id):
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM delivery_workers WHERE id = %s", (worker_id,))
-        worker = cursor.fetchone()
-        cursor.close()
-        conn.close()
-        if worker:
-            return jsonify(worker), 200
-        else:
-            return jsonify({'message': 'Worker not found'}), 404
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    # Add new user to the database
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({'message': 'Account created successfully!'}), 201
+
+# Route to handle login
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.json.get('username')
+    password = request.json.get('password')
+    
+    user = User.query.filter_by(username=username).first()
+    if user and user.check_password(password):
+        return jsonify({'message': 'Login successful!', 'user': user.to_dict()}), 200
+    else:
+        return jsonify({'message': 'Invalid credentials, please try again.'}), 401
+
+# Route to get all users (API)
+@app.route('/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    return jsonify([user.to_dict() for user in users]), 200
+
+# Route to get a specific user by ID (API)
+@app.route('/users/<int:id>', methods=['GET'])
+def get_user(id):
+    user = User.query.get(id)
+    if user:
+        return jsonify(user.to_dict()), 200
+    else:
+        return jsonify({'message': 'User not found'}), 404
 
 if __name__ == '__main__':
     app.run(debug=True)
