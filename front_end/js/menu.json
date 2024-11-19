@@ -1,0 +1,38 @@
+[
+    {
+      "id": 1,
+      "name": "Margherita Pizza",
+      "description": "Classic Margherita pizza with fresh tomatoes, mozzarella, and basil.",
+      "price": 12.99,
+      "image_url": "https://example.com/images/margherita.jpg"
+    },
+    {
+      "id": 2,
+      "name": "Cheese Burger",
+      "description": "Juicy beef burger with melted cheddar cheese, lettuce, and tomato.",
+      "price": 9.99,
+      "image_url": "https://example.com/images/cheeseburger.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Caesar Salad",
+      "description": "Fresh romaine lettuce with Caesar dressing, croutons, and parmesan.",
+      "price": 7.99,
+      "image_url": "https://example.com/images/caesarsalad.jpg"
+    },
+    {
+      "id": 4,
+      "name": "Spaghetti Bolognese",
+      "description": "Pasta with a rich and savory beef bolognese sauce.",
+      "price": 14.99,
+      "image_url": "https://example.com/images/spaghetti.jpg"
+    },
+    {
+      "id": 5,
+      "name": "Chicken Wings",
+      "description": "Crispy chicken wings served with a tangy dipping sauce.",
+      "price": 8.99,
+      "image_url": "https://example.com/images/chickenwings.jpg"
+    }
+  ]
+  

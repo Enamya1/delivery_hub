@@ -1,5 +1,5 @@
 // Fetch menu items and display them on the Menu page
-fetch('https://api.example.com/menu')
+fetch('./menu.json')
     .then(response => response.json())
     .then(data => {
         const menuContainer = document.getElementById('menu-items');
