@@ -1,0 +1,132 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Header Styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+}
+
+header .logo h1 {
+    font-size: 1.8rem;
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+}
+
+header nav ul li {
+    margin: 0 15px;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+header nav ul li a:hover {
+    color: #ff6f61; /* Change color on hover */
+}
+
+header .auth-links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 10px;
+    transition: color 0.3s ease;
+}
+
+header .auth-links a:hover {
+    color: #ff6f61; /* Change color on hover */
+}
+
+/* Hero Section */
+.hero {
+    background: url('https://example.com/hero-image.jpg') no-repeat center center;
+    background-size: cover;
+    height: 100vh;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.hero h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+.cta-btn {
+    background-color: #ff6f61;
+    padding: 15px 30px;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.cta-btn:hover {
+    background-color: #e55f4b; /* Darker shade on hover */
+    transform: scale(1.1); /* Slight scale-up effect */
+}
+
+/* Features Section */
+.features {
+    display: flex;
+    justify-content: space-around;
+    padding: 50px 20px;
+    background-color: #f4f4f4;
+}
+
+.features .feature {
+    text-align: center;
+    width: 30%;
+    padding: 20px;
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.features .feature:hover {
+    transform: translateY(-10px); /* Raise the card */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Add shadow on hover */
+}
+
+.features .feature h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+/* Footer Section */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+footer .social-links a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+
+footer .social-links a:hover {
+    color: #ff6f61
