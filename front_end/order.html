@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Hub - Home</title>
+    <title>Food Hub - Order</title>
     <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
@@ -14,9 +14,9 @@
         </div>
         <nav>
             <ul>
-                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="index.html">Home</a></li>
                 <li><a href="menu.html">Menu</a></li>
-                <li><a href="order.html">Order</a></li>
+                <li><a href="order.html" class="active">Order</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
         </nav>
@@ -26,11 +26,20 @@
         </div>
     </header>
 
-    <!-- Welcome Section -->
-    <section class="welcome">
-        <h2>Welcome to Food Hub</h2>
-        <p>Your favorite food delivered to your doorstep!</p>
-        <a href="menu.html" class="cta-button">Browse Menu</a>
+    <!-- Order Form Section -->
+    <section class="order">
+        <h2>Place Your Order</h2>
+        <form id="order-form">
+            <label for="item">Select Food Item:</label>
+            <select id="item" name="item">
+                <!-- Dynamic menu items will be added here -->
+            </select>
+            
+            <label for="address">Delivery Address:</label>
+            <input type="text" id="address" name="address" required>
+
+            <button type="submit">Place Order</button>
+        </form>
     </section>
 
     <!-- Footer -->
@@ -43,6 +52,6 @@
         </div>
     </footer>
 
-    <script src="js/menu.js"></script>
+    <script src="js/order.js"></script>
 </body>
 </html>

@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Hub - Home</title>
+    <title>Food Hub - Track Delivery</title>
     <link rel="stylesheet" href="styles/styles.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
 </head>
 <body>
     <!-- Header -->
@@ -14,10 +15,10 @@
         </div>
         <nav>
             <ul>
-                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="index.html">Home</a></li>
                 <li><a href="menu.html">Menu</a></li>
                 <li><a href="order.html">Order</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="track.html" class="active">Track</a></li>
             </ul>
         </nav>
         <div class="auth-links">
@@ -26,11 +27,10 @@
         </div>
     </header>
 
-    <!-- Welcome Section -->
-    <section class="welcome">
-        <h2>Welcome to Food Hub</h2>
-        <p>Your favorite food delivered to your doorstep!</p>
-        <a href="menu.html" class="cta-button">Browse Menu</a>
+    <!-- Track Delivery Section -->
+    <section class="track">
+        <h2>Track Your Delivery</h2>
+        <div id="map" style="height: 500px; width: 100%;"></div>
     </section>
 
     <!-- Footer -->
@@ -43,6 +43,6 @@
         </div>
     </footer>
 
-    <script src="js/menu.js"></script>
+    <script src="js/track.js"></script>
 </body>
 </html>
