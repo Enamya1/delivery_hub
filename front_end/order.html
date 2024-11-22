@@ -4,37 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Food Hub - Order</title>
-    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-    <!-- Header -->
     <header>
-        <div class="logo">
-            <h1>Food Hub</h1>
-        </div>
+        <h1>Food Hub</h1>
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="menu.html">Menu</a></li>
                 <li><a href="order.html" class="active">Order</a></li>
-                <li><a href="contact.html">Contact</a></li>
             </ul>
         </nav>
-        <div class="auth-links">
-            <a href="signin.html">Sign In</a>
-            <a href="signup.html">Sign Up</a>
-        </div>
     </header>
 
-    <!-- Order Form Section -->
     <section class="order">
         <h2>Place Your Order</h2>
         <form id="order-form">
             <label for="item">Select Food Item:</label>
-            <select id="item" name="item">
-                <!-- Dynamic menu items will be added here -->
-            </select>
-            
+            <select id="item" name="item"></select>
+
             <label for="address">Delivery Address:</label>
             <input type="text" id="address" name="address" required>
 
@@ -42,14 +31,8 @@
         </form>
     </section>
 
-    <!-- Footer -->
     <footer>
         <p>&copy; 2024 Food Hub. All rights reserved.</p>
-        <div class="social-links">
-            <a href="#">Facebook</a>
-            <a href="#">Instagram</a>
-            <a href="#">Twitter</a>
-        </div>
     </footer>
 
     <script src="js/order.js"></script>

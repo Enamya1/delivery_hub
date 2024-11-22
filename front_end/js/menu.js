@@ -1,46 +1,40 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const menuItemsContainer = document.getElementById('menu-items');
+    const menuItemsContainer = document.getElementById('item'); // Use the select tag with id 'item'
 
-    // Local JSON file path
-    const localJsonPath = './data/menu.json';
+    // The API endpoint for fetching menu items
+    const apiUrl = './data/menu.json'; // Assuming this is the correct endpoint for the menu items
 
-    // Function to fetch menu items from the local JSON file
+    // Function to fetch menu items from the API
     async function fetchMenuItems() {
         try {
-            const response = await fetch(localJsonPath);
+            const response = await fetch(apiUrl);
             if (!response.ok) {
-                throw new Error(`Error loading JSON file: ${response.status}`);
+                throw new Error(`Error loading menu items: ${response.status}`);
             }
             const menuItems = await response.json();
             displayMenuItems(menuItems);
         } catch (error) {
             console.error('Error fetching menu items:', error);
-            menuItemsContainer.innerHTML = '<p>Error loading menu items. Please try again later.</p>';
+            menuItemsContainer.innerHTML = '<option value="">Error loading menu items. Please try again later.</option>';
         }
     }
 
-    // Function to display menu items on the page
+    // Function to display menu items in the select dropdown
     function displayMenuItems(items) {
-        menuItemsContainer.innerHTML = ''; // Clear existing content
-        items.forEach(item => {
-            const itemElement = document.createElement('div');
-            itemElement.classList.add('menu-item');
-            itemElement.innerHTML = `
-                <img src="${item.image_url}" alt="${item.name}" class="menu-item-image">
-                <h3>${item.name}</h3>
-                <p>${item.description}</p>
-                <p>Price: $${item.price.toFixed(2)}</p>
-                <button class="order-btn" data-id="${item.id}">Order</button>
-            `;
-            menuItemsContainer.appendChild(itemElement);
-        });
+        menuItemsContainer.innerHTML = ''; // Clear the existing options
 
-        // Add event listeners to order buttons
-        document.querySelectorAll('.order-btn').forEach(button => {
-            button.addEventListener('click', () => {
-                const itemId = button.getAttribute('data-id');
-                alert(`Order placed for item ID: ${itemId}`);
-            });
+        // Add a default "Select" option
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Select Food Item';
+        menuItemsContainer.appendChild(defaultOption);
+
+        // Create an option for each menu item
+        items.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.id;  // Assuming item.id is the unique identifier
+            option.textContent = item.name;  // Assuming item.name is the name of the food item
+            menuItemsContainer.appendChild(option);
         });
     }
 
