@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Tables</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Database Tables</h1>
+    <div id="tables"></div>
+    <p id="error" class="error"></p>
+
+    <script>
+        // Fetch data from the Flask API
+        fetch('/tables')
+            .then(response => {
+                // Check if the response is valid
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Check if the response contains an error message
+                if (data.error) {
+                    document.getElementById('error').textContent = "Error: " + data.error;
+                    return;
+                }
+
+                const tablesDiv = document.getElementById('tables');
+
+                // Render Workers Table if data is available
+                if (data.workers && data.workers.length > 0) {
+                    const workersTable = createTable(data.workers, 'Workers Table');
+                    tablesDiv.appendChild(workersTable);
+                } else {
+                    tablesDiv.innerHTML += "<p>No workers data available.</p>";
+                }
+
+                // Render Deliveries Table if data is available
+                if (data.deliveries && data.deliveries.length > 0) {
+                    const deliveriesTable = createTable(data.deliveries, 'Deliveries Table');
+                    tablesDiv.appendChild(deliveriesTable);
+                } else {
+                    tablesDiv.innerHTML += "<p>No deliveries data available.</p>";
+                }
+            })
+            .catch(error => {
+                // Display error message if fetch fails
+                document.getElementById('error').textContent = "Failed to fetch data: " + error.message;
+            });
+
+        // Function to create a table element
+        function createTable(data, title) {
+            const table = document.createElement('table');
+            const caption = document.createElement('caption');
+            caption.textContent = title;
+            table.appendChild(caption);
+
+            // Create table header
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            Object.keys(data[0]).forEach(key => {
+                const th = document.createElement('th');
+                th.textContent = key.charAt(0).toUpperCase() + key.slice(1);
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // Create table body
+            const tbody = document.createElement('tbody');
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                Object.values(row).forEach(value => {
+                    const td = document.createElement('td');
+                    td.textContent = value;
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+
+            return table;
+        }
+    </script>
+</body>
+</html>

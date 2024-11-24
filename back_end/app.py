@@ -154,8 +154,22 @@ def manage_food_items():
         db.session.add(new_food_item)
         db.session.commit()
         return jsonify(food_item_schema.dump(new_food_item)), 201
+@app.route('/tables', methods=['GET'])
+def fetch_tables():
+    try:
+        # Test database connection
+        db.session.execute('SELECT 1')
 
-# Continue adding routes for orders, deliveries, workers, etc.
+        workers = Worker.query.all()
+        deliveries = Delivery.query.all()
+
+        worker_data = [{"id": w.id, "name": w.name, "vehicle_type": w.vehicle_type, "status": w.status} for w in workers]
+        delivery_data = [{"id": d.id, "pickup_address": d.pickup_address, "destination_address": d.destination_address, "delivery_status": d.delivery_status} for d in deliveries]
+
+        return jsonify({"workers": worker_data, "deliveries": delivery_data}), 200
+    except Exception as e:
+        return jsonify({"error": "Database connection failed: " + str(e)}), 500
+
 
 # ----------------- Initialize Database -----------------
 with app.app_context():

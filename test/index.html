@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Hub API Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            margin: 20px 0;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select, button {
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Food Hub API Tester</h1>
+
+    <!-- Add User Section -->
+    <div class="container">
+        <h2>Add User</h2>
+        <label for="username">Username:</label>
+        <input type="text" id="username" placeholder="Enter username">
+        <label for="password">Password:</label>
+        <input type="password" id="password" placeholder="Enter password">
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="Enter email">
+        <label for="role">Role:</label>
+        <select id="role">
+            <option value="customer">Customer</option>
+            <option value="admin">Admin</option>
+        </select>
+        <button onclick="addUser()">Add User</button>
+    </div>
+
+    <!-- View Food Items -->
+    <div class="container">
+        <h2>View Food Items</h2>
+        <button onclick="viewFoodItems()">Get Food Items</button>
+    </div>
+
+    <!-- View Database Section -->
+    <div class="container">
+        <h2>View Data in Database</h2>
+        <label for="database-table">Select Table:</label>
+        <select id="database-table">
+            <option value="users">Users</option>
+            <option value="food_items">Food Items</option>
+            <option value="orders">Orders</option>
+            <option value="order_items">Order Items</option>
+            <option value="categories">Categories</option>
+            <option value="payments">Payments</option>
+            <option value="deliveries">Deliveries</option>
+            <option value="workers">Workers</option>
+        </select>
+        <button onclick="viewTableData()">View Table Data</button>
+    </div>
+
+    <!-- Output Section -->
+    <div class="container">
+        <h2>Output</h2>
+        <textarea id="output" readonly></textarea>
+    </div>
+
+    <script>
+        const API_BASE_URL = "http://127.0.0.1:5000"; // Replace with your API base URL
+
+        // Helper function to update output
+        function updateOutput(message) {
+            const output = document.getElementById("output");
+            output.value = typeof message === "string" ? message : JSON.stringify(message, null, 2);
+        }
+
+        // Add User API Call
+        async function addUser() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const email = document.getElementById("email").value;
+            const role = document.getElementById("role").value;
+
+            const userData = { username, password, email, role };
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/users`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(userData)
+                });
+
+                const data = await response.json();
+                updateOutput(data);
+            } catch (error) {
+                updateOutput(`Error: ${error.message}`);
+            }
+        }
+
+        // View Food Items API Call
+        async function viewFoodItems() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/food_items`);
+                const data = await response.json();
+                updateOutput(data);
+            } catch (error) {
+                updateOutput(`Error: ${error.message}`);
+            }
+        }
+
+        // View Data from Selected Table
+        async function viewTableData() {
+            const table = document.getElementById("database-table").value;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/${table}`);
+                const data = await response.json();
+                updateOutput(data);
+            } catch (error) {
+                updateOutput(`Error: ${error.message}`);
+            }
+        }
+    </script>
+</body>
+</html>
